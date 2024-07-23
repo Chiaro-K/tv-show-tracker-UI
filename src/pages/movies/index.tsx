@@ -1,4 +1,2 @@
-const MovieList = () => {
-
-}
+const MovieList = () => {};
 export default MovieList;
