@@ -40,7 +40,7 @@ export default function SignIn() {
       email: data.get("email"),
       password: data.get("password"),
     });
-    navigate("/movies");
+    navigate("/shows");
   };
 
   return (

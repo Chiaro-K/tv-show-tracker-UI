@@ -10,7 +10,7 @@ const ShowsList = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text: any) => <a>{text}</a>,
+      render: (text: any) => <span>{text}</span>,
     },
     {
       title: "Description",
