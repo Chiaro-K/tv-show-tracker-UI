@@ -1,16 +1,17 @@
-import { CapacitorHttp, HttpResponse } from "@capacitor/core";
-import config from "../loader";
+import { request } from "react-request-hook";
 
-export class showService {
-  constructor() {}
+export const showService = {
+  getUserShows: () => {
+    return request<any[]>({
+      method: "GET",
+      url: `shows`,
+    });
+  },
 
-  url = config.baseUri;
-
-  getUserShows = async () => {
-    const options = {
-      url: `${this.url}/shows`,
-      headers: { "Content-Type": "application/json" },
-    };
-    return await CapacitorHttp.get(options);
-  };
-}
+  removeShow: (showId: string) => {
+    return request<any>({
+      method: "DELETE",
+      url: `shows/${showId}`,
+    });
+  },
+};

@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Space, Table, Tag } from "antd";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { Card, CardContent, CardHeader, Grid } from "@mui/material";
+import { IShow } from "../../models/showModel";
+import { useResource } from "react-request-hook";
+import { showService } from "../../services/showService";
+import { ConfirmationModal } from "../../components/modals/confirmationModal";
 
 const ShowsList = () => {
   const columns = [
@@ -35,7 +39,10 @@ const ShowsList = () => {
       render: (_: any, record: any) => (
         <Space size="middle">
           <VisibilityOutlinedIcon />
-          <DeleteOutlinedIcon />
+          <DeleteOutlinedIcon
+            color="error"
+            onClick={() => setIsDeleting(record)}
+          />
         </Space>
       ),
     },
@@ -63,15 +70,34 @@ const ShowsList = () => {
       tags: ["cool", "teacher"],
     },
   ];
+
+  const [isDeleting, setIsDeleting] = useState<IShow>();
+  const [showResponse, getShows] = useResource(showService.getUserShows);
+
+  const handleClose = (reload?: boolean) => {
+    if (reload === true) {
+      getShows();
+    }
+  };
+
+  useEffect(() => {
+    getShows();
+  }, []);
+
   return (
-    <Grid container={true} item={true} xs={12}>
-      <Card style={{ width: "100%" }}>
-        <CardHeader title="TV Shows List"></CardHeader>
-        <CardContent>
-          <Table columns={columns} dataSource={dummyData} />
-        </CardContent>
-      </Card>
-    </Grid>
+    <>
+      <Grid container={true} item={true} xs={12}>
+        <Card style={{ width: "100%" }}>
+          <CardHeader title="TV Shows List"></CardHeader>
+          <CardContent>
+            <Table columns={columns} dataSource={dummyData} />
+          </CardContent>
+        </Card>
+      </Grid>
+      {isDeleting && (
+        <ConfirmationModal show={isDeleting} handleClose={handleClose} />
+      )}
+    </>
   );
 };
 export default ShowsList;
